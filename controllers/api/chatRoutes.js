@@ -22,18 +22,45 @@ router.post('/', withAuth, async (req, res) => {
 // update chat based on id
 router.put('/:id', withAuth, async (req, res) => {
     try {
+        // updated blog based on request body
         const updatedChat = await Chat.update(
             {
                 ...req.body
             },
             {
+                // update based on blog id and based on user_id
                 where: {
                     id: req.params.id,
                     user_id: req.session.user_id,
                 },
             } );
+            // chat updated once status 200
             res.status(200).json(updatedChat);
     } catch (err) {
         res.status(500).json(err);
     }
 });
+
+// delete chat based on id, just when authenticated
+router.delete('/:id', withAuth, async (req, res) => {
+    try {
+        const deletedChat = await Chat.destroy({
+            where: {
+                id: req.params.id,
+                user_id: req.session.user_id,
+            },
+        });
+
+    // give error, if not your blog
+     if(!deletedBlog) {
+        res.status(403).json({ message: "You don't have permission to delete this chat." });
+     }
+
+    //  success status
+    res.status(200).json({ message: "Chat deleted successfully." })
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+mdoule.exports = router;
