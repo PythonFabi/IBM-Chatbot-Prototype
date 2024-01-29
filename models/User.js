@@ -1,6 +1,8 @@
 // Create a User model that includes an id, a username and a password
 const { Model, DataTypes } = require('sequelize');
+// use bcrypt for password hashing
 const bcrypt = require('bcrypt');
+// add sequelize for the database connection
 const sequelize = require('../config/connection');
 
 class User extends Model {
